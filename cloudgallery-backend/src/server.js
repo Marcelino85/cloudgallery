@@ -6,7 +6,7 @@ dotenv.config();
 
 const PORT = process.env.PORT || 3333;
 
-// Teste correto da conexão MySQL
+// Teste de conexão MySQL
 (async () => {
   try {
     await pool.query('SELECT 1');
