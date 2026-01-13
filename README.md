@@ -91,7 +91,7 @@ roadmap:
   - "[x] Inicialização do projeto backend"
   - "[x] Estrutura base de pastas"
   - "[x] Configuração do banco de dados MySQL"
-  - "[ ] Autenticação de usuários"
+  - "[x] Autenticação de usuários"
   - "[ ] CRUD de álbuns"
   - "[ ] Upload e gerenciamento de fotos"
   - "[ ] Visualização das fotos"
