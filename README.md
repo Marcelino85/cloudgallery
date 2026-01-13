@@ -92,7 +92,7 @@ roadmap:
   - "[x] Estrutura base de pastas"
   - "[x] Configuração do banco de dados MySQL"
   - "[x] Autenticação de usuários"
-  - "[ ] CRUD de álbuns"
+  - "[x] CRUD de álbuns"
   - "[ ] Upload e gerenciamento de fotos"
   - "[ ] Visualização das fotos"
   - "[ ] Integração com frontend (React)"
