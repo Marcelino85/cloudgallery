@@ -1,4 +1,4 @@
-1️⃣ Inicialização do projeto
+1️ Inicialização do projeto
     📌 Comandos iniciais
 
         mkdir cloudgallery-backend
@@ -10,9 +10,12 @@
         npm install express cors dotenv jsonwebtoken bcrypt pg multer
         npm install nodemon --save-dev
 
-2️⃣ package.json (scripts)
+2️ package.json (scripts)
 
     "scripts": {
         "dev": "nodemon src/server.js",
         "start": "node src/server.js"
     }
+
+3 Iniciar o programa
+    npm run dev
