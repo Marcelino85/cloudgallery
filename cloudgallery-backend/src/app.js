@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.routes.js';
+import albumRoutes from './routes/album.routes.js';
 
 const app = express();
 
@@ -9,6 +10,7 @@ app.use(express.json());
 app.use('/uploads', express.static('src/uploads'));
 
 app.use('/auth', authRoutes);
+app.use('/albums', albumRoutes);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'CloudGallery API is running' });
