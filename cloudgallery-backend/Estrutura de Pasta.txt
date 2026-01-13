@@ -1,0 +1,29 @@
+cloudgallery-backend/
+│
+├── src/
+│   ├── config/
+│   │   ├── database.js
+│   │   └── auth.js
+│   │
+│   ├── controllers/
+│   │   ├── authController.js
+│   │   ├── albumController.js
+│   │   └── photoController.js
+│   │
+│   ├── middlewares/
+│   │   └── authMiddleware.js
+│   │
+│   ├── routes/
+│   │   ├── auth.routes.js
+│   │   ├── album.routes.js
+│   │   └── photo.routes.js
+│   │
+│   ├── uploads/
+│   │
+│   ├── app.js
+│   └── server.js
+│
+├── .env
+├── .gitignore
+├── package.json
+└── README.md
