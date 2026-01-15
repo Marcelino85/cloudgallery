@@ -67,6 +67,7 @@ folder_structure:
       config:
         - database.js
         - auth.js
+        - upload.js
       controllers:
         - authController.js
         - albumController.js
