@@ -2,6 +2,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import pool from '../config/database.js';
 
+// =========================
+// REGISTER
+// =========================
 export const register = async (req, res) => {
   const { email, password } = req.body;
 
@@ -33,6 +36,9 @@ export const register = async (req, res) => {
   }
 };
 
+// =========================
+// LOGIN
+// =========================
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -75,4 +81,14 @@ export const login = async (req, res) => {
     console.error(error);
     return res.status(500).json({ message: 'Erro ao realizar login' });
   }
+};
+
+// =========================
+// ME (USUÁRIO LOGADO)
+// =========================
+export const me = async (req, res) => {
+  return res.json({
+    id: req.user.id,
+    email: req.user.email,
+  });
 };
