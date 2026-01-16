@@ -26,7 +26,7 @@ export default function Login() {
 
     try {
       await login(email, password);
-      navigate('/pagtest'); // ou '/' temporariamente
+      navigate('/albums'); // ou '/' temporariamente
     } catch {
       setError('E-mail ou senha inválidos');
     }
