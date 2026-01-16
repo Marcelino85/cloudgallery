@@ -6,10 +6,10 @@ import pool from '../config/database.js';
 // REGISTER
 // =========================
 export const register = async (req, res) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: 'E-mail e senha são obrigatórios' });
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: 'Nome, e-mail e senha são obrigatórios' });
   }
 
   try {
@@ -25,8 +25,8 @@ export const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await pool.query(
-      'INSERT INTO users (email, password) VALUES (?, ?)',
-      [email, hashedPassword]
+      'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+      [name, email, hashedPassword]
     );
 
     return res.status(201).json({ message: 'Usuário cadastrado com sucesso' });
@@ -74,6 +74,7 @@ export const login = async (req, res) => {
       token,
       user: {
         id: user.id,
+        name: user.name,
         email: user.email
       }
     });
@@ -87,8 +88,14 @@ export const login = async (req, res) => {
 // ME (USUÁRIO LOGADO)
 // =========================
 export const me = async (req, res) => {
-  return res.json({
-    id: req.user.id,
-    email: req.user.email,
-  });
+  const [users] = await pool.query(
+    'SELECT id, name, email FROM users WHERE id = ?',
+    [req.user.id]
+  );
+
+  if (users.length === 0) {
+    return res.status(404).json({ message: 'Usuário não encontrado' });
+  }
+
+  return res.json(users[0]);
 };

@@ -1,11 +1,13 @@
-import Login from './pages/Login';
+import AppRoutes from './routes/AppRoutes';
+
 import { Box } from '@chakra-ui/react';
 
 function App() {
   return (
     <Box minH="100vh" bg="gray.50"> 
-      <Login />
+      <AppRoutes />
     </Box>
+    
   );
 }
 
