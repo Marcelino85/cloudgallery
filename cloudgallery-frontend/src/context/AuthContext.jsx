@@ -14,13 +14,10 @@ export function AuthProvider({ children }) {
       password,
     });
 
-    const { token } = response.data;
-
+    const { token, user } = response.data;
     localStorage.setItem('token', token);
+    setUser(user);
 
-    // Busca dados completos do usuário
-    const meResponse = await api.get('/auth/me');
-    setUser(meResponse.data);
   }
 
   function logout() {

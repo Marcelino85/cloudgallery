@@ -12,8 +12,8 @@ export const uploadPhoto = async (req, res) => {
   }
 
   try {
-    const size = req.file.size; // bytes
-    const filePath = req.file.path;
+    const size = req.file.size;
+    const fileName = req.file.filename; // ✅ AQUI
 
     await pool.query(
       `INSERT INTO photos 
@@ -25,7 +25,7 @@ export const uploadPhoto = async (req, res) => {
         acquisition_date || null,
         size,
         dominant_color || null,
-        filePath,
+        fileName, // ✅ salva só o nome
         albumId
       ]
     );
@@ -36,6 +36,7 @@ export const uploadPhoto = async (req, res) => {
     return res.status(500).json({ message: 'Erro ao enviar foto' });
   }
 };
+
 
 /**
  * Listar fotos do álbum

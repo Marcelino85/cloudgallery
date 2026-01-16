@@ -11,8 +11,9 @@ const router = Router();
 
 router.use(authMiddleware);
 
-router.post('/:albumId', upload.single('photo'), uploadPhoto);
 router.get('/:albumId', listPhotos);
-router.delete('/photo/:id', deletePhoto);
+router.post('/:albumId', upload.single('photo'), uploadPhoto);
+router.delete('/:id', deletePhoto);
+
 
 export default router;
