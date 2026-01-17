@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
@@ -6,14 +7,20 @@ import {
   SimpleGrid,
   Image,
   Text,
+  Button,
+  Flex,
   Spinner,
+  useDisclosure
 } from '@chakra-ui/react';
 import api from '../api/api';
+import UploadPhotoModal from '../components/UploadPhotoModal';
 
 export default function AlbumDetails() {
   const { id: albumId } = useParams();
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
 
   useEffect(() => {
     async function loadPhotos() {
@@ -40,7 +47,14 @@ export default function AlbumDetails() {
 
   return (
     <Box p={8}>
-      <Heading mb={6}>Fotos do Álbum</Heading>
+        <Flex justify="space-between" align="center" mb={6}>
+            <Heading size="md">Fotos do Álbum</Heading>
+
+            <Button colorScheme="blue" onClick={onOpen}>
+                Enviar foto
+            </Button>
+        </Flex>
+
 
       {photos.length === 0 ? (
         <Text>Nenhuma foto cadastrada neste álbum.</Text>
@@ -59,7 +73,17 @@ export default function AlbumDetails() {
             </Box>
           ))}
         </SimpleGrid>
+     
       )}
+
+        <UploadPhotoModal
+        isOpen={isOpen}
+        onClose={onClose}
+        albumId={albumId}
+        />
+
+
     </Box>
+    
   );
 }
