@@ -96,8 +96,8 @@ roadmap:
   - "[x] CRUD de álbuns"
   - "[x] Upload e gerenciamento de fotos"
   - "[x] Visualização das fotos"
-  - "[ ] Integração com frontend (React)"
-  - "[ ] Melhorias de segurança"
+  - "[x] Integração com frontend (React)"
+  - "[x] Melhorias de segurança"
   - "[ ] Deploy em cloud"
 
 author:
