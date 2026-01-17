@@ -10,7 +10,10 @@ import {
   Button,
   Flex,
   Spinner,
-  useDisclosure
+  DialogRoot,
+  DialogContent,
+  DialogBody,
+  DialogCloseTrigger
 } from '@chakra-ui/react';
 import api from '../api/api';
 import UploadPhotoModal from '../components/UploadPhotoModal';
@@ -19,22 +22,27 @@ export default function AlbumDetails() {
   const { id: albumId } = useParams();
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+   // 🔹 CONTROLE DO MODAL (SUBSTITUI useDisclosure)
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [isPhotoOpen, setIsPhotoOpen] = useState(false);
 
+
+
+ // 🔹 FUNÇÃO PARA BUSCAR FOTOS (USADA TAMBÉM APÓS UPLOAD)
+  async function fetchPhotos() {
+    try {
+      const response = await api.get(`/photos/${albumId}`);
+      setPhotos(response.data);
+    } catch (error) {
+      console.error('Erro ao buscar fotos', error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    async function loadPhotos() {
-      try {
-        const response = await api.get(`/photos/${albumId}`);
-        setPhotos(response.data);
-      } catch (error) {
-        console.error('Erro ao buscar fotos', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadPhotos();
+    fetchPhotos();
   }, [albumId]);
 
   if (loading) {
@@ -50,8 +58,12 @@ export default function AlbumDetails() {
         <Flex justify="space-between" align="center" mb={6}>
             <Heading size="md">Fotos do Álbum</Heading>
 
-            <Button colorScheme="blue" onClick={onOpen}>
-                Enviar foto
+            {/* 🔹 BOTÃO ABRE O MODAL */}
+            <Button
+              colorScheme="blue"
+              onClick={() => setIsUploadOpen(true)}
+            >
+              Enviar foto
             </Button>
         </Flex>
 
@@ -69,18 +81,39 @@ export default function AlbumDetails() {
                 h="150px"
                 w="100%"
                 cursor="pointer"
+                // 🔹 CLIQUE NA FOTO (PRONTO PARA FOTO AMPLIADA)
+                onClick={() => {
+                  setSelectedPhoto(photo);
+                  setIsPhotoOpen(true);
+                }}
               />
             </Box>
           ))}
         </SimpleGrid>
      
       )}
-
+      {/* 🔹 MODAL DE UPLOAD */}
         <UploadPhotoModal
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={isUploadOpen}
+        onClose={() => setIsUploadOpen(false)}
         albumId={albumId}
+        onSuccess={fetchPhotos}
         />
+        <DialogRoot open={isPhotoOpen} onOpenChange={() => setIsPhotoOpen(false)}>
+          <DialogContent>
+            <DialogCloseTrigger />
+            <DialogBody p={4}>
+              {selectedPhoto && (
+                <Image
+                  src={`http://localhost:3333/uploads/${selectedPhoto.file_path}`}
+                  alt="Foto ampliada"
+                  maxH="80vh"
+                  mx="auto"
+                />
+              )}
+            </DialogBody>
+          </DialogContent>
+        </DialogRoot>
 
 
     </Box>
