@@ -1,107 +1,167 @@
-# 🚧 Projeto em desenvolvimento
+# 📸 CloudGallery
 
-Este repositório está sendo construído como parte de um processo seletivo.  
-A documentação será atualizada conforme a evolução do projeto.
+Aplicação **Fullstack** para gerenciamento de álbuns e fotos, desenvolvida como parte de um teste técnico, com foco em **arquitetura limpa, autenticação, upload de arquivos e experiência do usuário**.
 
 ---
 
-## 📄 Especificação do Projeto (YAML)
+## 🚀 Visão Geral
 
-```yaml
-project:
-  name: "CloudGallery"
+O **CloudGallery** permite que usuários autenticados:
 
-objective: >
-  Desenvolver uma aplicação web fullstack para gerenciamento de álbuns de fotos,
-  permitindo que usuários se cadastrem, autentiquem-se e organizem suas imagens
-  em álbuns, com upload, visualização e gerenciamento de fotos, seguindo boas
-  práticas de arquitetura, segurança e organização de código.
+- Criem álbuns
+- Enviem fotos para cada álbum
+- Visualizem fotos em **miniaturas ou tabela**
+- Ampliem fotos em um dialog
+- Excluam fotos com confirmação
+- Gerenciem seus próprios conteúdos com segurança
 
-stack:
-  backend:
-    - Node.js
-    - Express
-    - MySQL
-    - JWT
-    - Bcrypt
-    - Multer
-    - dotenv
-    - CORS
-  tools:
-    - Nodemon
-    - Git
-    - GitHub
+A aplicação foi construída utilizando **React + Chakra UI (v3)** no frontend e **Node.js + Express + MySQL** no backend.
 
-status: "🛠 Em desenvolvimento"
+---
 
-run_local:
-  backend:
-    steps:
-      - name: "Inicialização do projeto"
-        commands:
-          - mkdir cloudgallery-backend
-          - cd cloudgallery-backend
-          - npm init -y
+## 🧱 Tecnologias Utilizadas
 
-      - name: "Instalação das dependências"
-        commands:
-          - npm install express cors dotenv jsonwebtoken bcrypt mysql2 multer
-          - npm install nodemon --save-dev
+### Frontend
+- React
+- Vite
+- Chakra UI v3
+- React Router DOM
+- Axios
+- Context API (AuthContext)
 
-      - name: "Scripts do package.json"
-        scripts:
-          dev: "nodemon src/server.js"
-          start: "node src/server.js"
+### Backend
+- Node.js
+- Express
+- MySQL
+- Multer (upload de arquivos)
+- JWT (autenticação)
+- Cors
 
-      - name: "Executar aplicação"
-        commands:
-          - npm run dev
+---
 
-    notes: >
-      É necessário configurar o arquivo .env com as variáveis de ambiente
-      do banco de dados MySQL e JWT.
+## 🔐 Autenticação
 
-folder_structure:
-  cloudgallery-backend:
-    src:
-      config:
-        - database.js
-        - auth.js
-        - upload.js
-      controllers:
-        - authController.js
-        - albumController.js
-        - photoController.js
-      middlewares:
-        - authMiddleware.js
-      routes:
-        - auth.routes.js
-        - album.routes.js
-        - photo.routes.js
-      uploads: []
-      files:
-        - app.js
-        - server.js
-    root:
-      - .env
-      - .gitignore
-      - package.json
-      - README.md
+- Login e registro de usuários
+- Autenticação via **JWT**
+- Token armazenado no `localStorage`
+- Interceptor Axios para envio automático do token
+- Rotas protegidas por middleware no backend
 
-roadmap:
-  - "[x] Inicialização do projeto backend"
-  - "[x] Estrutura base de pastas"
-  - "[x] Configuração do banco de dados MySQL"
-  - "[x] Autenticação de usuários"
-  - "[x] CRUD de álbuns"
-  - "[x] Upload e gerenciamento de fotos"
-  - "[x] Visualização das fotos"
-  - "[x] Integração com frontend (React)"
-  - "[x] Melhorias de segurança"
-  - "[ ] Deploy em cloud"
+---
 
-author:
-  github: https://github.com/Marcelino85
-  linkedin: https://www.linkedin.com/in/marcelino-albuquerque-developer
+## 📂 Funcionalidades Implementadas
+
+### 🗂 Álbuns
+- Criar álbum
+- Listar álbuns do usuário
+- Editar álbum
+- Excluir álbum
+
+### 🖼 Fotos
+- Upload de fotos por álbum
+- Listagem de fotos do álbum
+- Visualização em **Grid (miniaturas)**
+- Visualização em **Tabela**
+- Foto ampliada em dialog
+- Exclusão de foto com confirmação
+
+---
+
+## 🖥 Telas da Aplicação
+
+- Tela de Login
+- Tela de Registro
+- Lista de Álbuns
+- Detalhes do Álbum
+  - Miniaturas
+  - Tabela
+  - Upload de Foto
+  - Foto Ampliada
+  - Exclusão de Foto
+
+---
+
+## 📡 Estrutura de Rotas (Backend)
+
+### Auth
+- POST /auth/register
+- POST /auth/login
+- GET /auth/me
+
+
+### Álbuns
+- POST /albums
+- GET /albums
+- PUT /albums/:id
+- DELETE /albums/:id
+
+### Fotos
+- GET /photos/:albumId
+- POST /photos/:albumId
+- DELETE /photos/:id
+
+---
+
+## 📁 Upload de Imagens
+
+- Upload realizado via **Multer**
+- Imagens armazenadas localmente
+- Pasta `/uploads` exposta como recurso estático
+- Apenas o **nome do arquivo** é utilizado para renderização no frontend
+
+- Exemplo: http://localhost:3333/uploads/nome-da-imagem.jpg
+
+---
+
+## 🧩 Arquitetura
+
+- Separação clara entre:
+  - Controllers
+  - Routes
+  - Middlewares
+  - Config
+- Frontend desacoplado do backend
+- Requisições centralizadas em `src/api/api.js`
+- Contexto global para autenticação
+
+---
+
+## ▶️ Como Executar o Projeto
+
+### Backend
+
+- cd backend
+- npm install
+- npm run dev
+- Servidor disponível em: http://localhost:3333
+
+### Frontend
+- cd frontend
+- npm install
+- npm run dev
+- Aplicação disponível em: http://localhost:5173
+
+### 🧪 Status do Projeto
+- Funcional
+
+- Estável
+
+- Fluxos principais completos
+
+- Melhorias de UI/UX planejadas
+
+# 🎯 Próximos Passos
+
+- Ajustes visuais (UI polish)
+- Responsividade avançada
+- Feedbacks visuais (toasts)
+- Melhor organização de layout
+- Permissões mais granulares
+
+#👨‍💻 Autor
+- Marcelino Albuquerque
+- Desenvolvedor Fullstack
+- Foco em Node.js, React e Cloud (AWS)
+
 
 
