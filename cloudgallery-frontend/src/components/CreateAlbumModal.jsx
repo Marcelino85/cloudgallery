@@ -1,10 +1,20 @@
 /* eslint-disable react/prop-types */
 import {
-  Dialog,
   Button,
   Input,
   Textarea,
-  Stack
+  Stack,
+  Box,
+  Text,
+  DialogRoot,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogBody,
+  DialogFooter,
+  DialogBackdrop,
+  DialogPositioner,
+  DialogCloseTrigger 
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { createAlbum } from '../services/albumsService';
@@ -19,58 +29,101 @@ export default function CreateAlbumModal({ isOpen, onClose, onCreated }) {
 
     try {
       setLoading(true);
+      // Enviando Título e Descrição conforme solicitado no teste
       await createAlbum({ title, description });
-      onCreated();
-      onClose();
+      
+      // Limpa os campos após o sucesso
       setTitle('');
       setDescription('');
+      
+      onCreated(); // Atualiza a lista de álbuns na tela principal
+      onClose();   // Fecha o modal
+    } catch (error) {
+      console.error("Erro ao criar álbum:", error);
+      alert("Erro ao criar o álbum. Tente novamente.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={(open) => {
-    if (!open) onClose();
-  }}>
-      <Dialog.Backdrop />
-      <Dialog.Positioner>
-        <Dialog.Content>
-          <Dialog.Header>
-            <Dialog.Title>Criar novo álbum</Dialog.Title>
-          </Dialog.Header>
+    <DialogRoot 
+      open={isOpen} 
+      onOpenChange={(details) => !details.open && onClose()}
+    >
+      <DialogBackdrop />
+      <DialogPositioner>
+        <DialogContent borderRadius="2xl" bg="white" boxShadow="2xl">
+          
+          {/* O "X" para fechar no canto superior direito */}
+          <DialogCloseTrigger 
+            position="absolute" 
+            top="4" 
+            right="4" 
+            cursor="pointer"
+          />
 
-          <Dialog.Body>
-            <Stack spacing={4}>
-              <Input
-                placeholder="Nome do álbum"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
+          <DialogHeader borderBottomWidth="1px" borderColor="gray.100" pb={4}>
+            <DialogTitle fontSize="xl" color="blue.800" fontWeight="bold">
+              Novo Álbum de Fotos
+            </DialogTitle>
+          </DialogHeader>
 
-              <Textarea
-                placeholder="Descrição (opcional)"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
+          <DialogBody py={6}>
+            <Stack gap={5}>
+              <Box>
+                <Text fontSize="sm" mb={1} fontWeight="semibold" color="gray.700">
+                  Título do Álbum
+                </Text>
+                <Input
+                  placeholder="Ex: Minhas Viagens"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  variant="subtle"
+                  size="lg"
+                  focusBorderColor="blue.500"
+                />
+              </Box>
+
+              <Box>
+                <Text fontSize="sm" mb={1} fontWeight="semibold" color="gray.700">
+                  Descrição (Opcional)
+                </Text>
+                <Textarea
+                  placeholder="Sobre o que são estas fotos?"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  variant="subtle"
+                  size="lg"
+                  rows={4}
+                  resize="none"
+                />
+              </Box>
             </Stack>
-          </Dialog.Body>
+          </DialogBody>
 
-          <Dialog.Footer>
-            <Button variant="ghost" mr={3} onClick={onClose}>
+          <DialogFooter borderTopWidth="1px" borderColor="gray.100" pt={4}>
+            <Button 
+              variant="ghost" 
+              mr={3} 
+              onClick={onClose} 
+              disabled={loading}
+              color="gray.600"
+            >
               Cancelar
             </Button>
             <Button
-              colorScheme="blue"
+              colorPalette="blue"
               onClick={handleSubmit}
-              isLoading={loading}
-              isDisabled={!title}
+              loading={loading}
+              disabled={!title}
+              px={8}
             >
-              Criar
+              Concluir
             </Button>
-          </Dialog.Footer>
-        </Dialog.Content>
-      </Dialog.Positioner>
-    </Dialog.Root>
+          </DialogFooter>
+        </DialogContent>
+      </DialogPositioner>
+    </DialogRoot>
   );
 }

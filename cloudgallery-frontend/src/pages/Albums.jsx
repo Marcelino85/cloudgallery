@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  SimpleGrid,
-  Button,
-  Box,
-} from '@chakra-ui/react';
-
+import { SimpleGrid, Button, Box, Container, Heading, Flex } from '@chakra-ui/react';
 import Header from '../components/Header';
 import AlbumCard from '../components/AlbumCard';
 import CreateAlbumModal from '../components/CreateAlbumModal';
@@ -14,10 +9,7 @@ export default function Albums() {
   const [albums, setAlbums] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-
-  useEffect(() => {
-    loadAlbums();
-  }, []);
+  useEffect(() => { loadAlbums(); }, []);
 
   async function loadAlbums() {
     const data = await getAlbums();
@@ -25,20 +17,22 @@ export default function Albums() {
   }
 
   return (
-    <Box p={6}>
+    <Box minH="100vh" bg="slate.50">
       <Header />
+      <Container maxW="container.xl" pb={10}>
+        <Flex justify="space-between" align="center" mb={8}>
+          <Heading size="lg" color="blue.900">Meus álbuns</Heading>
+          <Button colorPalette="blue" size="lg" onClick={() => setIsModalOpen(true)}>
+            + Criar novo álbum
+          </Button>
+        </Flex>
 
-      <SimpleGrid columns={{ base: 1, md: 4 }} spacing={6}>
-        {albums.map(album => (
-          <AlbumCard key={album.id} album={album} />
-        ))}
-      </SimpleGrid>
-
-      <Box mt={8} textAlign="right">
-        <Button colorScheme="blue" onClick={() => setIsModalOpen(true)}>
-          Criar novo álbum
-        </Button>
-      </Box>
+        <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} gap={6}>
+          {albums.map(album => (
+            <AlbumCard key={album.id} album={album} />
+          ))}
+        </SimpleGrid>
+      </Container>
 
       <CreateAlbumModal
         isOpen={isModalOpen}
