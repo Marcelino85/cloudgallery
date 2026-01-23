@@ -102,3 +102,29 @@ export const deleteAlbum = async (req, res) => {
     return res.status(500).json({ message: 'Erro ao excluir álbum' });
   }
 };
+
+/**
+ * Buscar álbum por ID
+ */
+export const getAlbumById = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.userId;
+
+  try {
+    const [albums] = await pool.query(
+      `SELECT id, title, description, created_at
+       FROM albums
+       WHERE id = ? AND user_id = ?`,
+      [id, userId]
+    );
+
+    if (albums.length === 0) {
+      return res.status(404).json({ message: 'Álbum não encontrado' });
+    }
+
+    return res.json(albums[0]);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Erro ao buscar álbum' });
+  }
+};
