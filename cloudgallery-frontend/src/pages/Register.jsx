@@ -6,87 +6,139 @@ import {
   Input,
   Stack,
   Text,
+  Container,
+  VStack,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/api';
+import { useAuth } from '../context/AuthContext'; // Importando para o login automático
 
 export default function Register() {
+  const navigate = useNavigate();
+  const { login } = useAuth(); // Função de login para automação
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+
+  // Validação de senha: Mínimo 6 caracteres, letras, números e símbolos
+  const validatePassword = (pass) => {
+    const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    return regex.test(pass);
+  };
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
-    setSuccess('');
+
+    if (!validatePassword(password)) {
+      setError('A senha deve ter no mínimo 6 caracteres, incluindo letras, números e símbolos.');
+      return;
+    }
 
     try {
-      await api.post('/auth/register', {
-        name,
-        email,
-        password,
-      });
+      // 1. Cria a conta [cite: 21]
+      await api.post('/auth/register', { name, email, password });
 
-      setSuccess('Cadastro realizado com sucesso! Faça login.');
-      setName('');
-      setEmail('');
-      setPassword('');
+      // 2. Login automático imediato
+      await login(email, password);
+      
+      // 3. Redireciona para os álbuns [cite: 22, 23]
+      navigate('/albums');
     } catch (err) {
-      setError(
-        err.response?.data?.message || 'Erro ao realizar cadastro'
-      );
+      setError(err.response?.data?.message || 'Erro ao realizar cadastro');
     }
   }
 
   return (
-    <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
-      <Box w="100%" maxW="400px" p={6} borderWidth="1px" borderRadius="lg">
-        <Heading mb={6}>Cadastro</Heading>
+    <Box 
+      minH="100vh" 
+      display="flex" 
+      alignItems="center" 
+      justifyContent="center"
+      bgGradient="to-br" 
+      gradientFrom="slate.50" 
+      gradientTo="violet.50"
+    >
+      <Container maxW="md">
+        <Box bg="white" p={8} borderRadius="2xl" boxShadow="xl" borderWidth="1px">
+          <VStack mb={8} textAlign="center">
+            <Heading size="xl" color="blue.800">Criar Conta</Heading>
+            <Text color="gray.600">Junte-se à nossa galeria inteligente</Text>
+          </VStack>
 
-        <form onSubmit={handleSubmit}>
-          <Stack spacing={4}>
-            <Input
-              placeholder="Nome"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+          <form onSubmit={handleSubmit}>
+            <Stack gap={4}>
+              <Box>
+                <Text fontSize="sm" mb={1} fontWeight="medium" color="gray.700">Nome</Text>
+                <Input
+                  placeholder="Seu nome completo"
+                  size="lg"
+                  variant="subtle"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </Box>
 
-            <Input
-              placeholder="E-mail"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+              <Box>
+                <Text fontSize="sm" mb={1} fontWeight="medium" color="gray.700">E-mail</Text>
+                <Input
+                  placeholder="exemplo@email.com"
+                  size="lg"
+                  variant="subtle"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  required
+                />
+              </Box>
 
-            <Input
-              type="password"
-              placeholder="Senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+              <Box>
+                <Text fontSize="sm" mb={1} fontWeight="medium" color="gray.700">Senha</Text>
+                <Input
+                  type="password"
+                  placeholder="mín. 6 caracteres (letras, números e @)"
+                  size="lg"
+                  variant="subtle"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </Box>
 
-            {error && <Text color="red.500">{error}</Text>}
-            {success && <Text color="green.500">{success}</Text>}
+              {error && (
+                <Text color="red.500" fontSize="xs" bg="red.50" p={2} borderRadius="md">
+                  {error}
+                </Text>
+              )}
 
-            <Button type="submit" colorScheme="blue">
-              Cadastrar
-            </Button>
-
-            <Text fontSize="sm" textAlign="center">
-              Já tem conta?{' '}
-              <Text
-                as={Link}
-                to="/"
-                color="blue.500"
-                cursor="pointer"
+              <Button 
+                type="submit" 
+                size="lg" 
+                colorPalette="blue"
+                fontWeight="bold"
+                mt={2}
               >
-                Faça login
+                Concluir Cadastro
+              </Button>
+
+              <Text fontSize="sm" textAlign="center" color="gray.600">
+                Já possui conta?{' '}
+                <Text 
+                  as={Link} 
+                  to="/" 
+                  color="blue.600" 
+                  fontWeight="semibold"
+                >
+                  Faça login aqui.
+                </Text>
               </Text>
-            </Text>
-          </Stack>
-        </form>
-      </Box>
+            </Stack>
+          </form>
+        </Box>
+      </Container>
     </Box>
   );
 }
