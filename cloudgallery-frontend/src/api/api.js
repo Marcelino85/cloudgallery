@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3333', // ajuste se necessário
+  baseURL: 'https://cloudgalleryapi.onrender.com', // ajuste se necessário
 });
 
 // Interceptor para token (entra depois que o AuthContext existir)
