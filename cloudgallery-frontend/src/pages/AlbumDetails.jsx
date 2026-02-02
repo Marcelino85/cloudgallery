@@ -27,7 +27,7 @@ import {
 import api from '../api/api';
 import UploadPhotoModal from '../components/UploadPhotoModal';
 
-const BASE_URL = 'http://localhost:3333';
+const BASE_URL = 'https://cloudgalleryapi.onrender.com';
 
 export default function AlbumDetails() {
   const { id: albumId } = useParams();
